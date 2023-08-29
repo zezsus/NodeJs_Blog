@@ -1,10 +1,13 @@
 const newRouter = require("./news");
 const siteRouter = require("./site");
+const courseRouter = require("./courses");
 
 function route(app) {
   app.use("/news", newRouter);
 
   app.use("/", siteRouter);
+
+  app.use("/:slug", courseRouter);
 
   app.post("/search", (req, res) => {
     console.log(req.body);
