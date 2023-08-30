@@ -1,5 +1,8 @@
 const Course = require("../models/Course");
-const { mongooseToObject } = require("../../util/mongoose");
+const {
+  mongooseToObject,
+  mutipleMongooseToObject,
+} = require("../../util/mongoose");
 
 class CoursesController {
   //[GET] /courses/:slug
@@ -16,7 +19,25 @@ class CoursesController {
     res.render("courses/create");
   }
 
-  //[POST] /courses/store
+  //[GET] /courses/:id/edit
+  edit(req, res, next) {
+    Course.findById(req.params.id)
+      .then((course) => {
+        res.render("courses/edit", {
+          course: mongooseToObject(course),
+        });
+      })
+      .catch(next);
+  }
+
+  //[PUT] /courses/:id
+  update(req, res, next) {
+    Course.updateOne({ _id: req.params.id }, req.body)
+      .then(() => res.redirect("/me/store/course"))
+      .catch(next);
+  }
+
+  //[POST] /course/store
   store(req, res, next) {
     // res.json(req.body);
     const formData = req.body;
